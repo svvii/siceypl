@@ -1,18 +1,9 @@
-{/* <script src="https://cdn.jsdelivr.net/npm/mysql2@3.9.2/index.min.js"></script> */}
-// const mysql=require('https://cdn.jsdelivr.net/npm/mysql2@3.9.2/index.min.js')
-
-// var connection = new MySQL.Connection({
-//     host: 'tu-host',
-//     user: 'tu-usuario',
-//     password: 'tu-contraseña',
-//     database: 'tu-base-de-datos'
-//   });
-  
 let escaneoCompleto = false;
 const video = document.getElementById("video");
 const titulo = document.getElementById("buscar_libro");
 const autor = document.getElementById("autor");
 const editorial = document.getElementById("editorial");
+const cantidad= document.getElementById("cantidad")
 navigator.mediaDevices
   .getUserMedia({ video: { facingMode: "environment" } })
   .then((stream) => {
@@ -36,26 +27,17 @@ async function tick() {
       canvasElement.height
     );
     const code = jsQR(imageData.data, imageData.width, imageData.height);
-    console.log(code)
+    console.log(code);
     if (code) {
-        await obtenerLibro()
-      titulo.value=code.data
+      const [ tituloQR, autorQR, editorialQR, cantidadQR  ] = code.data.split("%");
+      console.log(tituloQR)
+
+      titulo.value = tituloQR;
+      autor.value = autorQR;
+      editorial.value = editorialQR;
+      cantidad.value=cantidadQR
       escaneoCompleto = true;
     }
   }
   requestAnimationFrame(tick);
-}
-
-function acomodarDatos(){
-
-}
-
-async function obtenerLibro(){
-    await connection.query(
-        'SELECT * FROM `librosb`',
-        function(err, results, fields) {
-          console.log(results); 
-          console.log(fields); 
-        }
-      );
 }

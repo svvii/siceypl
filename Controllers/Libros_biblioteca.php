@@ -121,7 +121,7 @@ class Libros_biblioteca extends Controller
         $librosqr = $this->model->obtenerDatosqr($id);
         if ($librosqr) {
             
-            $datos_legibles = $librosqr['id'];
+            $datos_legibles = $librosqr['titulo']."%".$librosqr['autor']."%".$librosqr['editorial']."%".$librosqr['cantidad'];
             
             $generator = new barcode_generator();
             $svg = $generator->render_svg("qr", $datos_legibles, "");
