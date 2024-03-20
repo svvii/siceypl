@@ -1,0 +1,19 @@
+.custom-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: #333; /* Cambia esto al color de texto que desees */
+    padding: 10px;
+    border-bottom: 2px solid #807878; /* Cambia esto al color de la línea que desees */
+    transition: background-color 0.3s;
+}
+
+.custom-link:hover {
+    background-color: #686262; /* Cambia esto al color de fondo que desees al pasar el mouse */
+}
+
+.link-text {
+    margin-top: 5px;
+}

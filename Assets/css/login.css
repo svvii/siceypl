@@ -1,0 +1,76 @@
+/* Estilos generales */
+body {
+    background: url('Assets/img/FONDO.jpeg');
+    background-size: cover;
+}
+
+.bg-primary {
+    background-color: #7c767e !important;
+}
+
+.container {
+    margin-top: 100px;
+}
+
+.card {
+    border: none;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-footer {
+    text-align: center;
+}
+
+/* Estilos para los campos del formulario */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* Estilos para el botón de inicio de sesión */
+.btn-success {
+    background-color: #076e0c;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-success:hover {
+    background-color: #4b504c;
+}
+
+/* Estilos para el icono */
+.fa-user, .fa-key {
+    margin-right: 10px;
+}
+
+/* Estilos para el mensaje de alerta */
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+
+

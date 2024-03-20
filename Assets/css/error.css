@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .content {
+    text-align: center;
+    margin: 100px auto;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(145, 96, 136, 0.2);
+  }
+  
+  .pagina {
+    text-decoration: none;
+    font-size: 24px;
+    color: #14a814;
+  }
+  
+  .pagina:hover {
+    color: #ca1f1f;
+  }
+  
+  hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #ccc;
+  }
+  
+  .tags {
+    font-weight: bold;
+    font-size: 25px;
+    color: #063610;
+  }
+  
+  p {
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
+  }

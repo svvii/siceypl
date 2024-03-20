@@ -1,0 +1,90 @@
+  
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    padding: 20px;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #343a40;
+}
+
+.navbar-brand h2 {
+    margin: 0;
+    color: #ffffff;
+}
+
+.navbar-toggler-icon {
+    color: #ffffff;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+/* Sidebar Styles */
+#layoutSidenav_nav {
+    background-color: #343a40;
+}
+
+.sb-sidenav-menu {
+    padding-top: 20px;
+}
+
+.sb-sidenav-menu a.nav-link {
+    color: #d1d1d1;
+}
+
+.sb-sidenav-menu a.nav-link:hover {
+    color: #ffffff;
+}
+
+.sb-sidenav-menu .nav-link i {
+    margin-right: 10px;
+}
+
+/* Main Content Styles */
+#layoutSidenav_content {
+    background-color: #ffffff;
+    margin-left: 240px;
+}
+
+/* Footer Styles */
+footer {
+    background-color: rgb(75, 90, 29);
+    color: #ffffff;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Table Styles (for DataTables) */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+/* Adjustments for DataTables */
+.dataTables_wrapper {
+    padding: 10px;
+}
+/* Adjustments for Modal */
+.modal {
+    background-color: rgba(0, 0, 0, 0.5);
+}

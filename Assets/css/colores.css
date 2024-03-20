@@ -1,0 +1,44 @@
+/* colores.css */
+
+/* Fondo de la barra superior */
+.navbar, .sb-topnav {
+    background-color: #2C3E50; /* Azul oscuro */
+    color: #ecf0f1; /* Texto blanco */
+}
+
+/* Enlaces de la barra superior */
+.navbar-nav .nav-link, .dropdown-item {
+    color: #ecf0f1; /* Texto blanco */
+}
+
+/* Iconos de la barra superior */
+.navbar-nav .nav-link i {
+    color: #ecf0f1; /* Iconos blancos */
+}
+
+/* Icono del menú desplegable en la barra superior */
+#sidebarToggle {
+    color: #ecf0f1; /* Icono blanco */
+}
+
+/* Menú lateral */
+.sb-sidenav {
+    background-color: rgb(102, 102, 102); /* Azul medio */
+    color: #ecf0f1; /* Texto blanco */
+}
+
+/* Enlaces del menú lateral */
+.sb-sidenav a.nav-link {
+    color: #ecf0f1; /* Texto blanco */
+}
+
+/* Iconos del menú lateral */
+.sb-sidenav a.nav-link i {
+    color: #ecf0f1; /* Iconos blancos */
+}
+
+/* Fondo del cuerpo principal */
+#layoutSidenav_content {
+    background-color: #ffffff; /* Gris claro */
+    color: #2C3E50; /* Texto azul oscuro */
+}
