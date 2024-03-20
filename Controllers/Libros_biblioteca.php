@@ -120,24 +120,9 @@ class Libros_biblioteca extends Controller
 
         $librosqr = $this->model->obtenerDatosqr($id);
         if ($librosqr) {
-            $datos = array(
-                'ID' => $librosqr['id'],
-                'Biblioteca' => $librosqr['biblioteca'],
-                'Clasificación' => $librosqr['clasificacion'],
-                'Código' => $librosqr['codigo'],
-                'Cantidad' => $librosqr['cantidad'],
-                'Cantidad de Ejemplar' => $librosqr['cantidadejemplar'],
-                'Título' => $librosqr['titulo'],
-                'Autor' => $librosqr['autor'],
-                'Editorial' => $librosqr['editorial'],
-                'Observaciones' => $librosqr['observaciones'],
-                'Estado' => $librosqr['estado']
-            );
-            $datos_legibles = "";
-            foreach ($datos as $key => $value) {
-                $datos_legibles .= $key . ": " . $value . "\n";
-            }
-
+            
+            $datos_legibles = $librosqr['id'];
+            
             $generator = new barcode_generator();
             $svg = $generator->render_svg("qr", $datos_legibles, "");
             header("Content-Type: image/svg+xml");

@@ -65,6 +65,9 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="<?php echo base_url; ?>Assets/js/Chart.min.js"></script>
 <script src="<?php echo base_url; ?>Assets/js/funciones.js"></script>
+<script src="<?php echo base_url; ?>Assets/js/scanner2.js"></script>
+
+
 </body>
 
 </html>

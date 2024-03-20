@@ -92,7 +92,7 @@ class Libros_bibliotecaModel extends Query
     }
     public function obtenerDatosqr($id)
     {
-        $sql = "SELECT id, biblioteca, clasificacion, codigo, cantidad, cantidadejemplar, titulo, autor, editorial, observaciones, estado FROM librosb WHERE id = $id";
+        $sql = "SELECT id FROM librosb WHERE id = $id";
         $res = $this->select($sql);
         if ($res !== false && count($res) > 0) {
             return $res;
