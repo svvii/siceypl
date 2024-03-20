@@ -3,6 +3,7 @@
     <li class="breadcrumb-item active">Prestamos</li>
 </ol>
 <button class="btn btn-secondary mb-2" type="button" onclick="frmprestamodelibros();"><i class="fas fa-plus"></i></button>
+<script src="https://cdn.jsdelivr.net/npm/mysql2@3.9.2/index.min.js"></script>
 <table class="table table-light" id="tbl_prestamoslibros">
     <thead class="thead-dark">
         <tr>

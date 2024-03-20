@@ -1,3 +1,13 @@
+{/* <script src="https://cdn.jsdelivr.net/npm/mysql2@3.9.2/index.min.js"></script> */}
+// const mysql=require('https://cdn.jsdelivr.net/npm/mysql2@3.9.2/index.min.js')
+
+// var connection = new MySQL.Connection({
+//     host: 'tu-host',
+//     user: 'tu-usuario',
+//     password: 'tu-contraseña',
+//     database: 'tu-base-de-datos'
+//   });
+  
 let escaneoCompleto = false;
 const video = document.getElementById("video");
 const titulo = document.getElementById("buscar_libro");
@@ -12,7 +22,7 @@ navigator.mediaDevices
   })
   .catch((err) => console.error("Error accessing camera:", err));
 
-function tick() {
+async function tick() {
   if (!escaneoCompleto && video.readyState === video.HAVE_ENOUGH_DATA) {
     const canvasElement = document.createElement("canvas");
     canvasElement.width = video.videoWidth;
@@ -28,6 +38,7 @@ function tick() {
     const code = jsQR(imageData.data, imageData.width, imageData.height);
     console.log(code)
     if (code) {
+        await obtenerLibro()
       titulo.value=code.data
       escaneoCompleto = true;
     }
@@ -37,4 +48,14 @@ function tick() {
 
 function acomodarDatos(){
 
+}
+
+async function obtenerLibro(){
+    await connection.query(
+        'SELECT * FROM `librosb`',
+        function(err, results, fields) {
+          console.log(results); 
+          console.log(fields); 
+        }
+      );
 }
