@@ -1,4 +1,7 @@
 <?php include "Views/Templates/header.php"; ?>
+<?php
+date_default_timezone_set('America/Mexico_City');
+?>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active">Prestamos</li>
 </ol>
@@ -33,27 +36,32 @@
                 </button>
             </div>
             <div class="modal-body">
-            
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <!-- <button onclick="iniciarEscaneoQR()" style="padding: 10px 20px; background-color: #28a745; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Escanear QR</button> -->
-                    <div style="position: relative;">
-                    <video id="video" width="25%" height="25%" autoplay></video>
+                <div style="display: flex; align-items: center; justify-content: center; margin: 10px; position: relative;">
+                    <video id="video" width="120" height="90" autoplay style="border: 2px solid #4CAF50; position: relative;">
+                        <source src="tu_video.mp4" type="video/mp4">
+                        Tu navegador no admite la etiqueta de video.
+                    </video>
+                    <div style="position: absolute; top: 5px; left: 5px; z-index: 1;">
+                        <img src="http://www.utparral.edu.mx/logotipos/lobo.png" alt="Icono" width="30" height="30">
+                    </div>
+                    <div style="position: absolute; top: 5px; right: 5px; z-index: 1; transform: scaleX(-1);">
+                        <img src="http://www.utparral.edu.mx/logotipos/lobo.png" alt="Icono" width="30" height="30">
                     </div>
                 </div>
-                
                 <form method="post" id="frmprestamodelibros">
                     <input type="hidden" id="id" name="id">
                     <hr>
                     <div class="row">
                         <div class="col-md-12">
-                        <h3 style="font-size: 1.2em; color: #333; margin-bottom: 20px;">Llenado Automático</h3>
+                            <h3 style="font-size: 1.2em; color: #333; margin-bottom: 20px;">Llenado Automático</h3>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="buscar_libro">Buscar libro</label>
-                                <input id="buscar_libro" class="form-control" name="buscar_libro" style="width: 100%;">
+                                <label for="buscar_libro">Buscar Libro</label>
+                                <select id="buscar_libro" class="form-control select_libro" name="buscar_libro" style="width: 100%;">
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -144,7 +152,7 @@
             </form>
         </div>
     </div>
-    
+
 </div>
 
 <?php include "Views/Templates/footer.php"; ?>

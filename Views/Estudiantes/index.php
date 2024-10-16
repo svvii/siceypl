@@ -11,8 +11,8 @@
             <th>Nombre Estudiante</th>
             <th>Matricula</th>
             <th>Carrera</th>
-            <th>Telefono</th>
             <th>Correo</th>
+            <th>Telefono</th>
             <th>Observaciones</th>
             <th>Estado</th>
             <th>Acciones</th>

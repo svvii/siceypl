@@ -17,7 +17,7 @@ class Prestamoslibros extends Controller
     public function index()
     {
         $id_user = $_SESSION['id_usuario'];
-        $verificar = $this->model->verficarpermiso($id_user, 'carreras');
+        $verificar = $this->model->verficarpermiso($id_user, 'Prestamos Libros');
         if (!empty($verificar) || $id_user == 1) {
             $this->views->getViews($this, "index");
         } else {
@@ -232,8 +232,8 @@ class Prestamoslibros extends Controller
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'siceypl@gmail.com';
-            $mail->Password   = 'virl sxsd muxa rdwn';
+            $mail->Username   = 'noreply@utparral.edu.mx';
+            $mail->Password   = 'nmja iswm soxc vbaw';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port       = 465;
 
@@ -297,27 +297,28 @@ class Prestamoslibros extends Controller
         $pdf->Cell(190, 10, 'Listado de Prestamos', 0, 1, 'L');
         $pdf->SetLineWidth(0.5);
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(20, 5, 'Id', 1, 0, 'C');
-        $pdf->Cell(25, 5, 'Cantidad ', 1, 0, 'C');
-        $pdf->Cell(24, 5, 'F. Prestamo', 1, 0, 'C');
-        $pdf->Cell(30, 5, 'F. Devolucion ', 1, 0, 'C');
-        $pdf->Cell(80, 5, 'Nombre Estudiante', 1, 0, 'C');
-        $pdf->Cell(25, 5, 'Estado', 1, 0, 'C');
-        $pdf->Cell(75, 5, 'Titulo', 1, 1, 'C');
+        $pdf->Cell(10, 5, 'Id', 1, 0, 'C');
+        $pdf->Cell(18, 5, 'Cantidad ', 1, 0, 'C');
+        $pdf->Cell(24, 5, 'Prestamo', 1, 0, 'C');
+        $pdf->Cell(24, 5, 'Devolucion ', 1, 0, 'C');
+        $pdf->Cell(60, 5, 'Estudiante', 1, 0, 'C');
+        $pdf->Cell(20, 5, 'Estado', 1, 0, 'C');
+        $pdf->Cell(133, 5, 'Titulo', 1, 1, 'C');
         $pdf->SetFont('Arial', '', 11);
         foreach ($prestamoss as $prestam) {
-            $pdf->Cell(20, 5, ($prestam['id']), 1, 0, 'C');
-            $pdf->Cell(25, 5, ($prestam['cantidad']), 1, 0, 'C');
+            $pdf->Cell(10, 5, ($prestam['id']), 1, 0, 'C');
+            $pdf->Cell(18, 5, ($prestam['cantidad']), 1, 0, 'C');
             $pdf->Cell(24, 5, ($prestam['fecha_prestamo']), 1, 0, 'C');
-            $pdf->Cell(30, 5, ($prestam['fecha_devolucion']), 1, 0, 'C');
-            $pdf->Cell(80, 5, ($prestam['nombre_estudiante']), 1, 0, 'C');
+            $pdf->Cell(24, 5, ($prestam['fecha_devolucion']), 1, 0, 'C');
+            $pdf->Cell(60, 5, ($prestam['nombre_estudiante']), 1, 0, 'C');
             if ($prestam['estado'] == 1) {
-                $pdf->Cell(25, 5, 'Prestado', 1, 0, 'C');
+                $pdf->Cell(20, 5, 'Prestado', 1, 0, 'C');
             } else {
-                $pdf->Cell(25, 5, 'Entregado', 1, 0, 'C');
+                $pdf->Cell(20, 5, 'Entregado', 1, 0, 'C');
             }
 
-            $pdf->Cell(75, 5, ($prestam['titulo']), 1, 1, 'C');
+            $pdf->Cell(133, 5, utf8_decode(substr($prestam['titulo'], 0, 77)), 1, 1, 'C');
+
         }
         $pdf->Output();
     }

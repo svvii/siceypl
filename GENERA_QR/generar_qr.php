@@ -46,11 +46,22 @@
     
     <?php if (isset($contenido_qr)) : ?>
         <BR></BR>
+        <!-- Prueba de depuración: Mostrar el contenido del código QR en texto simple -->
+        <p>Contenido del código QR:</p>
+        <pre><?php echo $contenido_qr; ?></pre>
+        
+        <!-- Prueba de depuración: Mostrar la URL del código QR -->
+        <p>URL del código QR: <?php echo 'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=' . urlencode($contenido_qr); ?></p>
+
+        <!-- Prueba de depuración: Verificar la visualización de la imagen -->
+        <p>Imagen del código QR:</p>
+        <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=<?php echo urlencode($contenido_qr); ?>" alt="Código QR" class="qr-code">
+        
         <button id="mostrarModal"><i class="fa-solid fa-qrcode"></i> Mostrar QR</button>
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <h2>Información del Documento De Estadias:</h2>
-                <pre><?php //echo $contenido_qr; ?></pre>
+                <pre><?php echo $contenido_qr; ?></pre>
                 <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=<?php echo urlencode($contenido_qr); ?>" alt="Código QR" class="qr-code">
                 <br>
                 <button id="cerrarModal">Cerrar</button>
@@ -72,9 +83,6 @@
     <?php else : ?>
         <p>No se encontró información de la Estadia.</p>
     <?php endif; ?>
-</body>
-</html>
-
 </body>
 </html>
 

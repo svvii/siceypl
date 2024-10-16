@@ -4,5 +4,7 @@ const host = "localhost";
 const user = "root";
 const pass = "";
 const db = "sistema";
-const charset ="charset=utf8";
+const charset = "utf8";
 ?>
+
+

@@ -10,7 +10,7 @@ class Editoriales extends Controller{
     public function index()
     {
         $id_user = $_SESSION ['id_usuario'];
-        $verificar = $this->model->verficarpermiso($id_user,'autores');
+        $verificar = $this->model->verficarpermiso($id_user,'Editoriales');
         if (!empty($verificar)|| $id_user == 1) { 
             $this->views->getViews($this,"index") ;
         } else {

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Views.php';
+
     class Controller{
         protected $views, $model;
         public function __construct()

@@ -10,7 +10,7 @@ class Estudiantes extends Controller{
     public function index()
     {
         $id_user = $_SESSION['id_usuario'];
-        $verificar = $this->model->verficarpermiso($id_user, 'lectores');
+        $verificar = $this->model->verficarpermiso($id_user, 'Estudiantes');
         $data['carreras_e'] = $this->model->getCarreras();
     
         if (!empty($verificar) || $id_user == 1) { 

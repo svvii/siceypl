@@ -1,3 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="http://utparral.edu.mx/logotipos/UTP.png">
+    <link href="../Assets/css/BUSCADOR_ESTADIAS.CSS" rel="stylesheet">
+    <link href="../Assets/css/LOGO.CSS" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Buscador Estadias</title>
+    <style>
+        /* Agrega estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo-left">
+        <a href="http://localhost/estadias/Administracion/home"><img src="../../../estadias/Assets/img/utp_modificado.png" width="60" height="60"></a>
+    </div>
+    <div class="title-center">
+        <h1>SISTEMA INTEGRAL PARA EL CONTROL DE ESTADÍAS</h1>
+    </div>
+    <div class="logo-right">
+        <a href="http://localhost/estadias/Administracion/home"><img src="../../../estadias/Assets/img/lobo_negro.png" width="60" height="60"></a>
+    </div>
+</header>
+<br>
+
+<form action="" method="GET" style="text-align: center;">
+    <input type="text" name="buscar" placeholder="Buscar por Nombre, Matrícula, Empresa, Tutor, Asesor Académico, Asesor Empresarial" style="font-size: 1.2em; padding: 0.5em; border: 1px solid #2ecc71; border-radius: 5px;" value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
+
+    <select name="tipo_busqueda" style="font-size: 1.2em; padding: 0.5em; border: 1px solid #2ecc71; border-radius: 5px;">
+        <option value="nombre_matricula" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'nombre_matricula') ? 'selected' : ''; ?>>Nombre o Matrícula</option>
+        <option value="empresa" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'empresa') ? 'selected' : ''; ?>>Nombre de la Empresa</option>
+        <option value="tutor" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'tutor') ? 'selected' : ''; ?>>Tutor Académico</option>
+        <option value="asesor_academico" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'asesor_academico') ? 'selected' : ''; ?>>Asesor Académico</option>
+        <option value="asesor_empresarial" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'asesor_empresarial') ? 'selected' : ''; ?>>Asesor Empresarial</option>
+    </select>
+
+    <input type="submit" value="Buscar" style="font-size: 1.2em; padding: 0.5em 1em; background-color: #248a0e; color: white; border: none; border-radius: 5px; cursor: pointer;">
+</form>
+
 <?php
 $conexion = new mysqli("localhost", "root", "", "sistema");
 
@@ -48,7 +125,8 @@ if (isset($_GET['buscar'])) {
             case 'asesor_empresarial':
                 $condiciones = [];
                 foreach ($palabras_clave as $palabra) {
-                    $condiciones[] = "asesor_empresarial LIKE '%$palabra%'";
+                    $condiciones[] =
+                    "asesor_empresarial LIKE '%$palabra%'";
                 }
                 $filtrar = " WHERE " . implode(' AND ', $condiciones);
                 break;
@@ -70,66 +148,29 @@ if (isset($_GET['buscar'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="robots" content="noindex, nofollow">
-    <link rel="icon" href="http://utparral.edu.mx/logotipos/UTP.png">
-    <link href="../Assets/css/BUSCADOR_ESTADIAS.CSS" rel="stylesheet">
-    <link href="../Assets/css/LOGO.CSS" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/Zpi_Bw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Buscador Estadias</title>
-</head>
-<body>
-<header>
-        <div class="logo-left">
-        <a href="http://localhost/estadias/Administracion/home"><img src="../../../estadias/Assets/img/utp_modificado.png" width="60" height="60"></a></div>
-        <div class="title-center"><h1>SISTEMA INTEGRAL PARA EL CONTROL DE ESTADÍAS</h1></div>
-        <div class="logo-right"><a href="http://localhost/estadias/Administracion/home"><img src="../../../estadias/Assets/img/lobo_negro.png" width="60" height="60"></a></div>
-    </header>
-    <br>
-    <form action="" method="GET" style="text-align: center;">
-        <input type="text" name="buscar" placeholder="Buscar por Nombre, Matrícula, Empresa, Tutor, Asesor Académico, Asesor Empresarial" style="font-size: 1.2em; padding: 0.5em; border: 1px solid #2ecc71; border-radius: 5px;" value="<?php echo isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : ''; ?>">
-
-        <select name="tipo_busqueda" style="font-size: 1.2em; padding: 0.5em; border: 1px solid #2ecc71; border-radius: 5px;">
-            <option value="nombre_matricula" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'nombre_matricula') ? 'selected' : ''; ?>>Nombre o Matrícula</option>
-            <option value="empresa" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'empresa') ? 'selected' : ''; ?>>Nombre de la Empresa</option>
-            <option value="tutor" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'tutor') ? 'selected' : ''; ?>>Tutor Académico</option>
-            <option value="asesor_academico" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'asesor_academico') ? 'selected' : ''; ?>>Asesor Académico</option>
-            <option value="asesor_empresarial" <?php echo (isset($_GET['tipo_busqueda']) && $_GET['tipo_busqueda'] == 'asesor_empresarial') ? 'selected' : ''; ?>>Asesor Empresarial</option>
-        </select>
-
-        <input type="submit" value="Buscar" style="font-size: 1.2em; padding: 0.5em 1em; background-color: #248a0e; color: white; border: none; border-radius: 5px; cursor: pointer;">
-    </form>
-
-    <?php
-    if ($contadorResultados > 0) {
-        echo "<p class='mensaje-box'>Total de resultados: $contadorResultados</p>";
-        echo "<table>";
-        echo "<tr><th>ID</th><th>Nombre</th><th>Matrícula</th><th>Nombre Empresa</th><th>Tutor Académico</th><th>Asesor Académico</th><th>Asesor Empresarial</th><th>Acciones</th></tr>";
-        while ($estadia = $resultado->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>{$estadia['id']}</td>";
-            echo "<td>{$estadia['nombre_completo']}</td>";
-            echo "<td>{$estadia['matricula']}</td>";
-            echo "<td>{$estadia['nombre_empresa']}</td>";
-            echo "<td>{$estadia['tutor_academico']}</td>";
-            echo "<td>{$estadia['asesor_academico']}</td>";
-            echo "<td>{$estadia['asesor_empresarial']}</td>";
-            echo "<td><a href='generar_qr.php?id={$estadia['id']}' style='text-align: center; display: block;'><i class='fa-solid fa-qrcode' style='display: inline-block;'></i></a></td>";
-            echo "</tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "<p class='mensaje-box'>No se encontraron resultados.</p>";
+<?php
+if ($contadorResultados > 0) {
+    echo "<p class='mensaje-box'>Total de resultados: $contadorResultados</p>";
+    echo "<table>";
+    echo "<tr><th>ID</th><th>Nombre</th><th>Matrícula</th><th>Nombre Empresa</th><th>Tutor Académico</th><th>Asesor Académico</th><th>Asesor Empresarial</th><th>Descargar</th></tr>";
+    while ($estadia = $resultado->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>{$estadia['id']}</td>";
+        echo "<td>{$estadia['nombre_completo']}</td>";
+        echo "<td>{$estadia['matricula']}</td>";
+        echo "<td>{$estadia['nombre_empresa']}</td>";
+        echo "<td>{$estadia['tutor_academico']}</td>";
+        echo "<td>{$estadia['asesor_academico']}</td>";
+        echo "<td>{$estadia['asesor_empresarial']}</td>";
+        echo "<td><a href='visualizar_pdf.php?id={$estadia['id']}' target='_blank' style='text-align: center; display: block;'><i class='fa-solid fa-file-pdf' style='display: inline-block;'></i></a></td>";
+        echo "</tr>";
     }
-    ?>
+    echo "</table>";
+} else {
+    echo "<p class='mensaje-box'>No se encontraron resultados.</p>";
+}
+$conexion->close();
+?>
 
-    <?php
-    $conexion->close();
-    ?>
 </body>
 </html>

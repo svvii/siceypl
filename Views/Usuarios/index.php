@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <label for="usuario">Usuario</label>
                         <input type="hidden" id="id" name="id"> 
-                        <input id="usuario" class="form-control" type="text" name="usuario" placeholder="Usuario">
+                        <input id="usuario" class="form-control" type="text" name="usuario" placeholder="Usuario" >
                     </div>
                 
                     <div class="form-group">

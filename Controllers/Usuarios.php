@@ -1,4 +1,5 @@
 <?php
+ require_once "./Config/App/Controller.php";
 class Usuarios extends Controller{
     public function __construct(){
         session_start();
@@ -8,7 +9,7 @@ class Usuarios extends Controller{
     public function index()
     {
         $id_user = $_SESSION ['id_usuario'];
-        $verificar = $this->model->verficarpermiso($id_user,'lectores');
+        $verificar = $this->model->verficarpermiso($id_user,'Usuarios');
         if (empty( $_SESSION['activo'] )) {
             header("location:" .base_url);
         }

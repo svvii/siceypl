@@ -29,6 +29,10 @@ class Administracion extends Controller{
         $data['prestamosbiblio']  = $this->model->getDatos('prestamosbiblio');
         $data['librosb']  = $this->model->getDatos('librosb');
         $data['documentos']  = $this->model->getDatos('documentos');
+        $data['estadiasb']  = $this->model->getDatos('estadiasb');
+        $data['estudiantes']  = $this->model->getDatos('estudiantes');
+        $data['autores']  = $this->model->getDatos('autores');
+        $data['editoriales']  = $this->model->getDatos('editoriales');
         $this->views->getViews($this,"home", $data) ;
     }
     public function modificar()

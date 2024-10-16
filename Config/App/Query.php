@@ -47,6 +47,14 @@ class Query extends Conexion{
         }
         return $res;
     }
+    public function seleccionar(string $sql, array $datos = [])
+    {
+        $this->sql = $sql;
+        $resul = $this->con->prepare($this->sql);
+        $resul->execute($datos);
+        $data = $resul->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
     
 
 }

@@ -27,17 +27,24 @@ class Libros extends Controller
     {
         $data = $this->model->getLibros();
         for ($i = 0; $i < count($data); $i++) {
-            $data[$i]['imagen'] = '<img  class="img-thumbnail" src="' . base_url. "Assets/imagen/default.png". $data[$i]['pdf'] . '">';
+            if (!empty($data[$i]['pdf'])) {
+                $pdfIcon = '<i class="fas fa-file-pdf fa-lg" style="color: #ffd700;"></i>';
+            } else {
+                $pdfIcon = '<i class="fas fa-file-pdf fa-lg" style="color: grey;"></i>';
+            }
+            $data[$i]['imagen'] = '<a href="' . base_url . 'Assets/Documentos/' . $data[$i]['pdf'] . '" target="_blank">' . $pdfIcon . '</a>';
             if ($data[$i]['estado'] == 1) {
                 $data[$i]['estado'] = '<span class="badge badge-success">Activo</span>';
-                $data[$i]['acciones'] = '<div>
-                <button class="btn btn-primary" type="button" onclick="btnEditarlibro(' . $data[$i]['id'] . ');"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-danger" type="button"  onclick="btnEliminarlibro(' . $data[$i]['id'] . ');"><i class="fas fa-trash-alt"></i></button>
+                $data[$i]['acciones'] = '<div class="btn-group" role="group" aria-label="Acciones">
+                    <button class="btn btn-primary" type="button" onclick="btnEditarlibro(' . $data[$i]['id'] . ');"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger" type="button" onclick="btnEliminarlibro(' . $data[$i]['id'] . ');"><i class="fas fa-trash-alt"></i></button>
+                    <a href="' . base_url . 'Libros/descargarPdf/' . $data[$i]['id'] . '" class="btn btn-info" target="_blank"><i class="fas fa-download"></i></a>
                 </div>';
             } else {
                 $data[$i]['estado'] = '<span class="badge badge-danger">Inactivo</span>';
-                $data[$i]['acciones'] = '<div>
-                <button class="btn btn-success" type="button"  onclick="btnReingresarlibro(' . $data[$i]['id'] . ');"><i class="fas fa-circle"></i></button>
+                $data[$i]['acciones'] = '<div class="btn-group" role="group" aria-label="Acciones">
+                    <button class="btn btn-success" type="button" onclick="btnReingresarlibro(' . $data[$i]['id'] . ');"><i class="fas fa-circle"></i></button>
+                    <a href="' . base_url . 'Libros/descargarPdf/' . $data[$i]['id'] . '" class="btn btn-info" target="_blank"><i class="fas fa-download"></i></a>
                 </div>';
             }
         }
@@ -47,7 +54,9 @@ class Libros extends Controller
 
     public function registrar()
     {
-        
+        $msg = '';
+
+        // Recolectar datos del formulario
         $color_estante = $_POST['color_estante'];
         $id_generacion  = $_POST['id_generacion'];
         $matricula = $_POST['matricula'];
@@ -64,43 +73,48 @@ class Libros extends Controller
         $asesor_empresarial = $_POST['asesor_empresarial'];
         $observaciones = $_POST['observaciones'];
 
-        // Asegúrate de incluir el nuevo campo "folio"
         $folio = isset($_POST['folio']) ? $_POST['folio'] : '';
+        $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
 
-        if (isset($_POST['id'])) {
-            $id = (int)$_POST['id'];
+        // Manejo de la imagen
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+            $img = $_FILES['imagen'];
+            $name = $img['name'];
+            $tmpname = $img['tmp_name'];
+            $destino = "Assets/Documentos/" . $name;
+
+            if (move_uploaded_file($tmpname, $destino)) {
+                // Imagen subida correctamente
+            } else {
+                $msg = "Error al subir la imagen.";
+                echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+                die();
+            }
         } else {
-            $id = 0;
-        }
-        $img = $_FILES['pdf'];
-        $name = $img ['name'];
-        $tmpname = $img ['tmp_name'];
-        $destino = "Assets/Documentos/".$name;
-        if (empty($name)) {
-            $name = "default.jpg";
+            $name = isset($_POST['foto_actual']) ? $_POST['foto_actual'] : "default.png";
         }
 
+        // Verificar campos obligatorios
         if (empty($color_estante) || empty($id_generacion) || empty($matricula) || empty($apellido_p) || empty($apellido_m) || empty($nombre) || empty($id_carrera) || empty($codigo_estadia) || empty($nombre_proyecto) || empty($fecha_documento) || empty($nombre_empresa) || empty($tutor_academico) || empty($asesor_academico) || empty($asesor_empresarial) || empty($observaciones)) {
             $msg = "todos los campos son obligatorios";
         } else {
-            
             if ($id == 0) {
-                $data = $this->model->registrarLibro($color_estante, $id_generacion, $matricula, $apellido_p, $apellido_m, $nombre, $id_carrera, $codigo_estadia, $nombre_proyecto, $fecha_documento, $nombre_empresa, $tutor_academico, $asesor_academico, $asesor_empresarial, $observaciones, $folio,$name);
+                // Registrar nuevo libro
+                $data = $this->model->registrarLibro($color_estante, $id_generacion, $matricula, $apellido_p, $apellido_m, $nombre, $id_carrera, $codigo_estadia, $nombre_proyecto, $fecha_documento, $nombre_empresa, $tutor_academico, $asesor_academico, $asesor_empresarial, $observaciones, $folio, $name);
                 if ($data == "ok") {
                     $msg = "si";
-                    move_uploaded_file($tmpname,$destino);
                 } else if ($data == "existe") {
                     $msg = " ya existe";
                 } else {
                     $msg = "Error al registrar el lector";
                 }
             } else {
-                $data = $this->model->modificarlibro($color_estante, $id_generacion, $matricula, $apellido_p, $apellido_m, $nombre, $id_carrera, $codigo_estadia, $nombre_proyecto, $fecha_documento, $nombre_empresa, $tutor_academico, $asesor_academico, $asesor_empresarial, $observaciones, intval($id));
-
+                // Modificar libro existente
+                $data = $this->model->modificarLibro($color_estante, $id_generacion, $matricula, $apellido_p, $apellido_m, $nombre, $id_carrera, $codigo_estadia, $nombre_proyecto, $fecha_documento, $nombre_empresa, $tutor_academico, $asesor_academico, $asesor_empresarial, $observaciones, $name, intval($id));
                 if ($data == "Modificado") {
                     $msg = "Modificado";
                 } else {
-                    $msg = "Error al Modificado estadia";
+                    $msg = "Error al modificar estadia";
                 }
             }
         }
@@ -108,6 +122,7 @@ class Libros extends Controller
         echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
     }
+
 
     public function editar(int $id)
     {
@@ -140,10 +155,30 @@ class Libros extends Controller
         die();
     }
     public function obtenerUltimoCodigo()
-{
-    $ultimoCodigo = $this->model->obtenerUltimoCodigo();
-    echo json_encode(['ultimoCodigo' => $ultimoCodigo], JSON_UNESCAPED_UNICODE);
-    die();
+    {
+        $ultimoCodigo = $this->model->obtenerUltimoCodigo();
+        echo json_encode(['ultimoCodigo' => $ultimoCodigo], JSON_UNESCAPED_UNICODE);
+        die();
+    }
+    public function descargarPdf(int $id)
+    {
+        $rutaPdf = $this->model->obtenerRutaPdfPorId($id);
+        if ($rutaPdf !== null) {
+            if (file_exists($rutaPdf)) {
+                ob_clean();
+                header('Content-Type: application/pdf');
+                // Cambia 'attachment' por 'inline'
+                header('Content-Disposition: inline; filename="Documento de Estadias.pdf"');
+                header('Content-Length: ' . filesize($rutaPdf));
+                header('Pragma: public');
+                header('Content-Transfer-Encoding: binary');
+                readfile($rutaPdf);
+                exit;
+            } else {
+                echo "El archivo PDF no se encontró en la ruta especificada.";
+            }
+        } else {
+            echo "No se encontró la ruta del archivo PDF en la base de datos.";
+        }
+    }
 }
-}
-?>

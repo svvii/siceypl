@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       cache: true
     },
-    placeholder: 'Buscar Libro',
+    placeholder: 'Buscar Libros',
     minimumInputLength: 2,
   });
 
@@ -1096,10 +1096,10 @@ document.addEventListener("DOMContentLoaded", function () {
         data: "nombre_carrera",
       },
       {
-        data: "telefono",
+        data: "correo",
       },
       {
-        data: "correo",
+        data: "telefono",
       },
       {
         data: "direccion",
@@ -1417,7 +1417,126 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     ],
   });
+  $(document).ready(function () {
+    // Inicializa DataTable
+    var tblEgresados = $("#tblEgresados").DataTable({
+        ajax: {
+            url: base_url + "Egresados/listar",
+            dataSrc: "",
+        },
+        columns: [
+            { data: "id" },
+            { data: "curp" },
+            { data: "nombre" },
+            { data: "ap_paterno" },
+            { data: "ap_materno" },
+            { data: "parral_balleza" },
+            { data: "genero" },
+            { data: "mes_anio_ingreso" },
+            { data: "mes_anio_egreso" },
+            { data: "fecha_egreso" },
+            { data: "numero_cedula" },
+            { data: "nivel" },
+            { data: "matricula" },
+            { data: "estatus" },
+            { data: "titulados_utp" },
+            { data: "fecha_cedulacion_dgp" },
+            { data: "fecha_pase_cedula" },
+            { data: "fecha_entrega_egresado" },
+            { data: "observaciones" },
+            { data: "respuesta_egresado" },
+            { data: "observacion_egresado" },
+            { data: "estado", searchable: false },
+            { data: "acciones", searchable: false },
+        ],
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json",
+        },
+        dom:
+            "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        buttons: [
+            {
+                // Botón para Excel
+                extend: "excelHtml5",
+                footer: true,
+                title: "Archivo",
+                filename: "Export_File",
+                text: '<span class="badge badge-success"><i class="fas fa-file-excel"></i></span>',
+            },
+            // Botón para PDF
+            {
+                extend: "pdfHtml5",
+                download: "open",
+                footer: true,
+                title: "Reporte de usuarios",
+                filename: "Reporte de usuarios",
+                text: '<span class="badge badge-danger"><i class="fas fa-file-pdf"></i></span>',
+                exportOptions: {
+                    columns: [0, ":visible"],
+                },
+            },
+            // Botón para copiar
+            {
+                extend: "copyHtml5",
+                footer: true,
+                title: "Reporte de usuarios",
+                filename: "Reporte de usuarios",
+                text: '<span class="badge badge-primary"><i class="fas fa-copy"></i></span>',
+                exportOptions: {
+                    columns: [0, ":visible"],
+                },
+            },
+            // Botón para imprimir
+            {
+                extend: "print",
+                footer: true,
+                filename: "Export_File_print",
+                text: '<span class="badge badge-light"><i class="fas fa-print"></i></span>',
+            },
+            // Botón para CSV
+            {
+                extend: "csvHtml5",
+                footer: true,
+                filename: "Export_File_csv",
+                text: '<span class="badge badge-success"><i class="fas fa-file-csv"></i></span>',
+            },
+            {
+                extend: "colvis",
+                text: '<span class="badge badge-info"><i class="fas fa-columns"></i></span>',
+                postfixButtons: ["colvisRestore"],
+            },
+        ],
+        initComplete: function () {
+            var api = this.api();
+            // Recorre las columnas y añade filtros de texto solo si no existen
+            api.columns().every(function (index) {
+                var column = this;
+                // Evita agregar filtros en las columnas de 'id', 'estado', y 'acciones'
+                if (index === 0 || index === 18|| index === 19 || index === 20|| index === 21 || index === 22) {
+                    return; // Salir de la función para estas columnas
+                }
+
+                // Verifica si el campo de entrada ya existe
+                if ($(column.header()).find('input[type="text"]').length === 0) {
+                    var input = $('<input type="text" placeholder="FILTRAR POR:" />')
+                        .appendTo($(column.header()))
+                        .on('keyup change clear', function () {
+                            if (column.search() !== this.value) {
+                                column.search(this.value).draw();
+                            }
+                        });
+                }
+            });
+        },
+    });
 });
+});
+
+
+
+
 function frmCambiarPass(e) {
   e.preventDefault();
   const actual = document.getElementById("clave_actual").value;
@@ -2338,6 +2457,7 @@ function frmlibro() {
   $("#nuevo_libro").modal("show");
   document.getElementById("id").value = "";
   generarFolio();
+  deleteimg();
 }
 function registrarlibro(e) {
   e.preventDefault();
@@ -2433,7 +2553,15 @@ function btnEditarlibro(id) {
           document.getElementById("tutor_academico").value = res.tutor_academico;
           document.getElementById("asesor_academico").value = res.asesor_academico;
           document.getElementById("asesor_empresarial").value = res.asesor_empresarial;
-          document.getElementById("pdf-preview").src = base_url + 'Assets/img/'+ res.foto;
+          document.getElementById("observaciones").value = res.observaciones;
+          const imgPath = base_url + 'Assets/Documentos/' + res.pdf;
+          document.getElementById("img-preview").src = imgPath;
+          document.getElementById("icono-cerrar").innerHTML = `
+          <button class="btn btn-danger" onclick="deleteimg()">
+          <i class="fas fa-times"></i></button>`;
+          document.getElementById("icon-image").classList.add("d-none");
+          document.getElementById("foto_actual").value = res.pdf;
+          document.getElementById("foto_delete").value = res.pdf;
           $("#nuevo_libro").modal("show");
       }
   };
@@ -2500,17 +2628,19 @@ function btnReingresarlibro(id) {
 function preview(e) {
   const url = e.target.files[0];
   const urlTmp = URL.createObjectURL(url);
-  document.getElementById("pdf-preview").src = urlTmp;
+  document.getElementById("img-preview").src = urlTmp;
   document.getElementById("icon-image").classList.add("d-none");
   document.getElementById("icono-cerrar").innerHTML = `
-  <button class="btn btn-danger" onclick="deletepdf(event)"><i class="fas fa-times"></i></button>
+  <button class="btn btn-danger" onclick="deleteimg()"><i class="fas fa-times"></i></button>
   ${url['name']}`;
 
 }
-function deletepdf(e) {
+function deleteimg() {
   document.getElementById("icono-cerrar").innerHTML = '';
   document.getElementById("icon-image").classList.remove("d-none");
-  document.getElementById("pdf-preview").src = '';
+  document.getElementById("img-preview").src = '';
+  document.getElementById("imagen").value = '';
+  document.getElementById("foto_delete").value = '';
  
 }
 //FIN ESTADIAS UTP 
@@ -3352,19 +3482,28 @@ function btnGenerarQR(id) {
     if (result.isConfirmed) {
       const url = base_url + "Libros_biblioteca/generarQR/" + id;
       fetch(url)
-        .then(response => response.blob())
-        .then(blob => {
-          const iconoBiblioteca = '<img src="https://chihuahua.gob.mx/sites/default/atach2/OIC/logos/2022-02/OIC-33.png" alt="Icono de biblioteca" style="max-width: 100px; height: auto;">';
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            Swal.fire({
+              title: 'Error',
+              text: data.error,
+              icon: 'error'
+            });
+            return;
+          }
+
           Swal.fire({
             title: 'Código QR generado',
-            html: '<img src="' + URL.createObjectURL(blob) + '" alt="Código QR" style="max-width: 100%; height: auto;">' + 
-                  '<br>' + iconoBiblioteca +
+            html: '<img src="data:image/svg+xml;base64,' + btoa(data.svg) + '" alt="Código QR" style="max-width: 200px; height: auto;">' +
+                  '<br><strong>Clasificación:</strong> ' + data.clasificacion +
                   '<br><button class="btn btn-success" id="downloadQR">Descargar QR</button>',
             icon: 'success'
           });
+          
 
           document.getElementById('downloadQR').addEventListener('click', () => {
-            descargarQR(blob);
+            descargarQR(data.svg, data.clasificacion);
           });
         })
         .catch(error => {
@@ -3378,24 +3517,88 @@ function btnGenerarQR(id) {
     }
   });
 }
-function descargarQR(svg) {
+function descargarQR(svg, clasificacion) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   const img = new Image();
-  
+
   img.onload = function() {
-    canvas.width = img.width;
-    canvas.height = img.height;
+    const padding = 20;
+    const qrSize = Math.max(img.width, img.height);
+    const maxWidth = qrSize - padding * 2; // Ancho máximo para el texto
+    const lineHeight = 24; // Altura de cada línea de texto
+    const words = clasificacion.split(' ');
+    let lines = [];
+    let currentLine = '';
+
+    // Dividir la clasificación en líneas
+    words.forEach(word => {
+      let testLine = currentLine + word + ' ';
+      let metrics = context.measureText(testLine);
+      let testWidth = metrics.width;
+      if (testWidth > maxWidth && currentLine !== '') {
+        lines.push(currentLine);
+        currentLine = word + ' ';
+      } else {
+        currentLine = testLine;
+      }
+    });
+    lines.push(currentLine);
+    const textHeight = lines.length * lineHeight;
+    canvas.width = qrSize;
+    canvas.height = qrSize + textHeight + padding * 2;
+
+    // Dibujar el QR
     context.drawImage(img, 0, 0);
+    context.font = '20px Arial';
+    context.fillStyle = 'white'; 
+    context.textAlign = 'center';
+
+    // Calcular la posición vertical inicial para el texto
+    let textY = qrSize + padding + lineHeight / 2;
+
+    // Dibujar cada línea de texto
+    lines.forEach(line => {
+      context.fillText(line.trim(), qrSize / 2, textY);
+      textY += lineHeight;
+    });
+
+    // Descargar la imagen
     const link = document.createElement('a');
     link.download = 'codigo_qr.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
+
   const blob = new Blob([svg], { type: 'image/svg+xml' });
   const url = URL.createObjectURL(blob);
   img.src = url;
 }
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+  var words = text.split(' ');
+  var line = '';
+  var lines = [];
+
+  for(var n = 0; n < words.length; n++) {
+    var testLine = line + words[n] + ' ';
+    var metrics = context.measureText(testLine);
+    var testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      lines.push(line);
+      line = words[n] + ' ';
+    }
+    else {
+      line = testLine;
+    }
+  }
+  lines.push(line);
+
+  for (var i = 0; i < lines.length; i++) {
+    context.fillText(lines[i], x, y + (i * lineHeight));
+  }
+}
+
+
 //fin libros de la biblioteca 
 function insertarregistros(url, tabla, selector, timeout) {
   const formData = new FormData(document.querySelector(selector));
@@ -3580,50 +3783,254 @@ function enviarCorreo(id) {
   });
 }
 
-function iniciarEscaneoQR() {
-  const video = document.getElementById('video');
-
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-      .then((stream) => {
-          video.srcObject = stream;
-          video.play();
-          escanearQR();
-      })
-      .catch((err) => console.error('Error accediendo a la cámara:', err));
+//campo nuevo
+function frmEgresado() {
+  document.getElementById("title").innerHTML = "Nuevo Registro";
+  document.getElementById("btnAccion").innerHTML = "Registrar";
+  document.getElementById("frmEgresado").reset();
+  $("#nuevo_egresado").modal("show");
+  document.getElementById("id").value = "";
 }
+function abrirCargaMasiva() {
+  $('#cargaMasivaModal').modal('show');
+}
+function registrarEgresado(e) {
+  e.preventDefault();
+  const curp = document.getElementById("curp");
+  const nombre = document.getElementById("nombre");
+  const ap_paterno = document.getElementById("ap_paterno");
+  const parral_balleza = document.getElementById("parral_balleza");
+  const genero = document.getElementById("genero");
+  const mes_anio_ingreso = document.getElementById("mes_anio_ingreso");
+  const mes_anio_egreso = document.getElementById("mes_anio_egreso");
+  const fecha_egreso = document.getElementById("fecha_egreso");
+  const numero_cedula = document.getElementById("numero_cedula");
+  const matricula = document.getElementById("matricula");
+  const estatus = document.getElementById("estatus");
+  const titulados_utp = document.getElementById("titulados_utp");
+  const fecha_cedulacion_dgp = document.getElementById("fecha_cedulacion_dgp");
+  const fecha_pase_cedula = document.getElementById("fecha_pase_cedula");
+  const fecha_entrega_egresado = document.getElementById("fecha_entrega_egresado");
 
-function escanearQR() {
-  const video = document.getElementById('video');
-  const canvasElement = document.createElement('canvas');
-  const context = canvasElement.getContext('2d');
-
-  // Esperar a que el video esté listo
-  video.onloadedmetadata = function() {
-      canvasElement.width = video.videoWidth;
-      canvasElement.height = video.videoHeight;
-      context.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-      const imageData = context.getImageData(0, 0, canvasElement.width, canvasElement.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height);
-      console.log(code)
-      if (code) {
-        
-          alert('Código QR detectado: ' + code.data);
-          buscarLibroPorQR(code)
-      } else {
-          requestAnimationFrame(escanearQR);
+  if (curp.value == "" ||  nombre== ""|| ap_paterno == ""|| parral_balleza == ""|| genero == ""|| mes_anio_ingreso == ""|| mes_anio_egreso == ""|| fecha_egreso == ""|| numero_cedula == ""|| matricula == "" || estatus == "" || titulados_utp == "" || fecha_cedulacion_dgp == "" || fecha_pase_cedula == "" || fecha_entrega_egresado== "") {
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: "Campo obligatorio",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  } else {
+    const url = base_url + "Egresados/registrar";
+    const frm = document.getElementById("frmEgresado");
+    const http = new XMLHttpRequest();
+    http.open("POST", url, true);
+    http.send(new FormData(frm));
+    http.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        const res = JSON.parse(this.responseText);
+        if (res == "si") {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Registro con exito",
+            showConfirmButton: false,
+            timer: 3000,
+          });
+          frm.reset();
+          $("#nuevo_egresado").modal("hide");
+          tblEgresados.ajax.reload();
+        } else if (res == "Modificado") {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Modificado con exito",
+            showConfirmButton: false,
+            timer: 3000,
+          });
+          $("#nuevo_egresado").modal("hide");
+          tblEgresados.ajax.reload();
+        } else {
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: res,
+            showConfirmButton: false,
+            timer: 3000,
+          });
+        }
       }
+    };
+  }
+}
+function btnEditarEgresados(id) {
+  document.getElementById("title").innerHTML = "Actualizar";
+  document.getElementById("btnAccion").innerHTML = "Modificar";
+  const url = base_url + "Egresados/editar/" + id;
+  const http = new XMLHttpRequest();
+  http.open("GET", url, true);
+  http.send();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const res = JSON.parse(this.responseText);
+      document.getElementById("id").value = res.id;
+      document.getElementById("curp").value = res.curp;
+      document.getElementById("nombre").value = res.nombre;
+      document.getElementById("ap_paterno").value = res.ap_paterno;
+      document.getElementById("ap_materno").value = res.ap_materno;
+      document.getElementById("parral_balleza").value = res.parral_balleza;
+      document.getElementById("genero").value = res.genero;
+      document.getElementById("mes_anio_ingreso").value = res.mes_anio_ingreso;
+      document.getElementById("mes_anio_egreso").value = res.mes_anio_egreso;
+      document.getElementById("fecha_egreso").value = res.fecha_egreso;
+      document.getElementById("numero_cedula").value = res.numero_cedula;
+      document.getElementById("matricula").value = res.matricula;
+      document.getElementById("estatus").value = res.estatus;
+      document.getElementById("titulados_utp").value = res.titulados_utp;
+      document.getElementById("fecha_cedulacion_dgp").value = res.fecha_cedulacion_dgp;
+      document.getElementById("fecha_pase_cedula").value = res.fecha_pase_cedula;
+      document.getElementById("fecha_entrega_egresado").value = res.fecha_entrega_egresado;
+      document.getElementById("observaciones").value = res.observaciones;
+      document.getElementById("respuesta_egresado").value = res.respuesta_egresado;
+      document.getElementById("observacion_egresado").value = res.observacion_egresado;
+      document.getElementById("respuesta_egresado").value = res.respuesta_egresado;
+      $("#nuevo_egresado").modal("show");
+    }
   };
 }
+function btnEliminarEgresado(id) {
+  Swal.fire({
+    title: "Estas Seguro de Eliminar?",
+    text: "El registro no se eliminara de forma permanente,solo cambiara el estado a inactivo!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "si!",
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "Egresados/eliminar/" + id;
+      const http = new XMLHttpRequest();
+      http.open("GET", url, true);
+      http.send();
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const res = JSON.parse(this.responseText);
+          if (res == "ok") {
+            Swal.fire("Mensaje!", "Registro eliminado con exito", "success");
+            tblEgresados.ajax.reload();
+          } else {
+            Swal.fire("Mensaje!", res, "error");
+          }
+        }
+      };
+    }
+  });
+}
+function btnReingresarEgresados(id) {
+  Swal.fire({
+    title: "Estas Seguro de reingresar?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "si!",
+    cancelButtonText: "No",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = base_url + "Egresados/reingresar/" + id;
+      const http = new XMLHttpRequest();
+      http.open("GET", url, true);
+      http.send();
+      http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const res = JSON.parse(this.responseText);
+          if (res == "ok") {
+            Swal.fire("Mensaje!", "Reingresado con exito", "success");
+            tblEgresados.ajax.reload();
+          } else {
+            Swal.fire("Mensaje!", res, "error");
+          }
+        }
+      };
+    }
+  });
+}
+//carga masiva
+function cargarMasivamente() {
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
 
-function buscarLibroPorQR(code){
-  var buscarLibro = document.getElementById("buscar_libro")
+  if (file && file.type === 'text/csv') {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+          const csvData = event.target.result;
+          enviarDatosCSV(csvData);
+      };
+      reader.readAsText(file);
+  } else {
+      Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Por favor, selecciona un archivo CSV válido.",
+          showConfirmButton: false,
+          timer: 3000,
+      });
+  }
+}
+function enviarDatosCSV(data) {
+  const url = base_url + "Egresados/cargar_masiva";
 
-  // buscarLibro.value=code
+  fetch(url, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ csvData: data })
+  })
+  .then(response => response.json())
+  .then(result => {
+      if (result.status === 'success') {
+          Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Carga masiva realizada con éxito",
+              showConfirmButton: false,
+              timer: 3000,
+          });
+          $('#cargaMasivaModal').modal('hide');
+          //tblEgresados.ajax.reload(); 
+      } else {
+          Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: result.message || "Error en la carga masiva",
+              showConfirmButton: false,
+              timer: 3000,
+          });
+      }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Error en la conexión: " + error.message,
+        showConfirmButton: false,
+        timer: 3000,
+    });
+});
+
+}
+
+//SUGERENCIAS 
+function abrirSugerencias() {
+  $('#mejorasModal').modal('show');
 }
 
 
-
-//FIN
+//FIN GRAFICAS
 // Data for the chart
 var data = {
   name: 'Monthly Sales Report', // Nombre de la gráfica

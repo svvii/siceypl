@@ -1,5 +1,5 @@
 <?php
-class EstadiasBModel extends Query
+class estadiasbModel extends Query
 {
     private $color_estante, $id_generacion, $matricula, $apellido_p, $apellido_m, $nombre, $id_carrera, $codigo_estadia, $nombre_proyecto, $fecha_documento, $nombre_empresa, $tutor_academico, $asesor_academico, $asesor_empresarial, $observaciones, $id, $estado;
 
@@ -9,7 +9,7 @@ class EstadiasBModel extends Query
     }
     public function getLibros()
     {
-        $sql = "SELECT * FROM EstadiasB";
+        $sql = "SELECT * FROM estadiasb";
         //$sql = "SELECT d.*, c.nombre as nombre_carrera FROM documentos d INNER JOIN carreras c ON d.id_carrera = c.id;";
         //$sql = "SELECT d.*, c.nombre as nombre_carrera, g.inicio, g.final as generacion FROM documentos d INNER JOIN carreras c ON d.id_carrera = c.id INNER JOIN generaciones g ON d.id_generacion = g.id;";
         $data = $this->selectAll($sql);
@@ -50,7 +50,7 @@ class EstadiasBModel extends Query
         $this->asesor_empresarial = $asesor_empresarial;
         $this->observaciones = $observaciones;
 
-        $sql = "INSERT INTO EstadiasB(color_estante, id_generacion, matricula, apellido_p, apellido_m, nombre, id_carrera, codigo_estadia, nombre_proyecto, fecha_documento, nombre_empresa, tutor_academico, asesor_academico, asesor_empresarial, observaciones, folio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+        $sql = "INSERT INTO estadiasb(color_estante, id_generacion, matricula, apellido_p, apellido_m, nombre, id_carrera, codigo_estadia, nombre_proyecto, fecha_documento, nombre_empresa, tutor_academico, asesor_academico, asesor_empresarial, observaciones, folio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         $datos = array($this->color_estante, $this->id_generacion, $this->matricula, $this->apellido_p, $this->apellido_m, $this->nombre, $this->id_carrera, $this->codigo_estadia, $this->nombre_proyecto, $this->fecha_documento, $this->nombre_empresa, $this->tutor_academico, $this->asesor_academico, $this->asesor_empresarial, $this->observaciones, $folio);
         $data = $this->save($sql, $datos);
 
@@ -97,7 +97,7 @@ class EstadiasBModel extends Query
         $this->asesor_empresarial = $asesor_empresarial;
         $this->observaciones = $observaciones;
         $this->id = $id;
-        $sql = "UPDATE EstadiasB SET color_estante = ?, id_generacion = ?, matricula = ?,  apellido_p = ?, apellido_m = ?, nombre = ?, id_carrera = ?, codigo_estadia = ?, nombre_proyecto = ?, fecha_documento = ?, nombre_empresa = ?, tutor_academico = ?, asesor_academico = ?, asesor_empresarial = ?, observaciones = ?  WHERE id = ?";
+        $sql = "UPDATE estadiasb SET color_estante = ?, id_generacion = ?, matricula = ?,  apellido_p = ?, apellido_m = ?, nombre = ?, id_carrera = ?, codigo_estadia = ?, nombre_proyecto = ?, fecha_documento = ?, nombre_empresa = ?, tutor_academico = ?, asesor_academico = ?, asesor_empresarial = ?, observaciones = ?  WHERE id = ?";
         $datos = array($this->color_estante, $this->id_generacion, $this->matricula, $this->apellido_p, $this->apellido_m, $this->nombre, $this->id_carrera, $this->codigo_estadia, $this->nombre_proyecto, $this->fecha_documento, $this->nombre_empresa, $this->tutor_academico, $this->asesor_academico, $this->asesor_empresarial, $this->observaciones, $this->id);
         $data = $this->save($sql, $datos);
 
@@ -111,7 +111,7 @@ class EstadiasBModel extends Query
 
     public function editarlibro(int $id)
     {
-        $sql = "SELECT * FROM EstadiasB WHERE id = $id";
+        $sql = "SELECT * FROM estadiasb WHERE id = $id";
         $data = $this->select($sql);
         return $data;
     }
@@ -120,21 +120,27 @@ class EstadiasBModel extends Query
     {
         $this->id = $id;
         $this->estado = $estado;
-        $sql = "UPDATE EstadiasB SET estado = ? WHERE id = ?";
+        $sql = "UPDATE estadiasb SET estado = ? WHERE id = ?";
         $datos = array($this->estado, $this->id);
         $data = $this->save($sql, $datos);
         return $data;
     }
 
-    public function verficarpermiso(int $id_user, string $nombre)
+    public function verificarPermiso(int $id_user, string $nombre)
     {
-        $sql = "SELECT P.id, p.permiso, d.id, d.id_usuario, d.id_permiso FROM permisos p INNER JOIN detalle_permisos d ON p.id = d.id_permiso WHERE d.id_usuario = $id_user AND p.permiso = '$nombre'";
-        $data = $this->selectAll($sql);
-        return $data;
+    $nombre = htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8');
+
+    $sql = "SELECT p.id AS permisoID, p.permiso AS permisoNombre, d.id AS detalleID, d.id_usuario, d.id_permiso
+            FROM permisos p
+            INNER JOIN detalle_permisos d ON p.id = d.id_permiso
+            WHERE d.id_usuario = $id_user AND p.permiso = '$nombre'";
+
+    $data = $this->selectAll($sql);
+    return $data;
     }
     public function obtenerUltimoCodigoestadia()
     {
-        $sql = "SELECT MAX(codigo_estadia) AS ultimoCodigo FROM EstadiasB";
+        $sql = "SELECT MAX(codigo_estadia) AS ultimoCodigo FROM estadiasb";
         $data = $this->select($sql);
         return isset($data['ultimoCodigo']) ? $data['ultimoCodigo'] : 0;
     }

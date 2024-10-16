@@ -136,17 +136,18 @@
                             </div>
                         </div>
                         <div class="row">
-                        <div class="col-md-6">
-                        <label for="archivoPDF">Archivo PDF:</label>
-                        <input type="file" id="archivoPDF" name="archivoPDF" accept=".pdf">
-                        </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="observaciones">Observaciones:</label>
                                     <textarea class="form-control" name="observaciones" id="observaciones" placeholder="Observaciones" rows="3"></textarea>
                                 </div>
                             </div>
+                        <div class="col-md-6">
+                        <div class="form-group">
+                        <label for="archivoPDF">Archivo PDF:</label>
+                        <input type="file" id="archivoPDF" name="archivoPDF" accept=".pdf">
                         </div>
+                       </div>
                 <button class="btn btn-success" type="button" onclick="registrarEB(event);" id="btnAccion">Registrar</button>
                 <button class="btn btn-secondary" type="button" data-dismiss="modal" >Cancelar</button>
             </form>

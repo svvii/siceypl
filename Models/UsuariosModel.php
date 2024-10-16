@@ -1,9 +1,12 @@
 <?php
-class UsuariosModel extends Query{
-    private $usuario, $nombre, $clave, $id_caja, $id,$estado;
+ require_once "./Config/App/Query.php";
+class UsuariosModel extends Query
+
+{
+    private $usuario, $nombre, $clave, $id_caja, $id, $estado;
     public function __construct()
     {
-      parent::__construct();
+        parent::__construct();
     }
     public function getUsuario(string $usuario, string $clave)
     {
@@ -17,14 +20,13 @@ class UsuariosModel extends Query{
         $data = $this->selectAll($sql);
         return $data;
     }
-
     public function getUsuarios()
     {
         $sql = "SELECT u.*,c.id as id_caja, c.caja FROM usuarios u INNER JOIN caja c where u.id_caja = c.id";
         $data = $this->selectAll($sql);
         return $data;
     }
-    public function registrarUsuario(string $usuario,string $nombre,string $clave, int $id_caja)
+    public function registrarUsuario(string $usuario, string $nombre, string $clave, int $id_caja)
     {
         $this->usuario = $usuario;
         $this->nombre = $nombre;
@@ -34,24 +36,21 @@ class UsuariosModel extends Query{
         $existe = $this->select($verificar);
         if (empty($existe)) {
             # code...
-        $sql = "INSERT INTO usuarios(usuario,nombre,clave,id_caja) VALUES(?,?,?,?)";
-        $datos = array($this->usuario, $this->nombre, $this-> clave, $this->id_caja);
-        $data = $this->save($sql,$datos);
-        if ($data == 1) {
-            $res = "ok";
-        }else{
-            $res = "error";
-        }
-    
-    }else{
+            $sql = "INSERT INTO usuarios(usuario,nombre,clave,id_caja) VALUES(?,?,?,?)";
+            $datos = array($this->usuario, $this->nombre, $this->clave, $this->id_caja);
+            $data = $this->save($sql, $datos);
+            if ($data == 1) {
+                $res = "ok";
+            } else {
+                $res = "error";
+            }
+        } else {
             $res = "existe";
         }
-    
-        return $res;
-    
 
+        return $res;
     }
-    public function modificarUsuario(string $usuario,string $nombre,int $id_caja, int $id)
+    public function modificarUsuario(string $usuario, string $nombre, int $id_caja, int $id)
     {
         $this->usuario = $usuario;
         $this->nombre = $nombre;
@@ -59,14 +58,13 @@ class UsuariosModel extends Query{
         $this->id_caja = $id_caja;
         $sql = "UPDATE usuarios SET usuario = ?, nombre = ?, id_caja = ? WHERE id = ?";
         $datos = array($this->usuario, $this->nombre, $this->id_caja, $this->id);
-        $data = $this->save($sql,$datos);
+        $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "Modificado";
-        }else{
+        } else {
             $res = "error";
         }
         return $res;
-    
     }
     public function editarUser(int $id)
     {
@@ -80,23 +78,21 @@ class UsuariosModel extends Query{
         $data = $this->select($sql);
         return $data;
     }
-     
-    public function accionUser(int $estado,int $id,)
+    public function accionUser(int $estado, int $id)
     {
         $this->id = $id;
-        $this->estado =$estado;
+        $this->estado = $estado;
         $sql = "UPDATE usuarios SET estado = ? WHERE id = ?";
-        $datos = array($this->estado,$this->id);
-        $data = $this->save($sql,$datos);
+        $datos = array($this->estado, $this->id);
+        $data = $this->save($sql, $datos);
         return $data;
-
-        }
+    }
     public function modificarPass(string $clave, int $id)
     {
         $sql = "UPDATE usuarios SET clave = ? WHERE id = ?";
         $datos = array($clave, $id);
-        $data = $this->save($sql,$datos);
-        return $data; 
+        $data = $this->save($sql, $datos);
+        return $data;
     }
     public function getpermisos()
     {
@@ -104,32 +100,30 @@ class UsuariosModel extends Query{
         $data = $this->selectAll($sql);
         return $data;
     }
-
-    public function registrarpermisos(int $id_user, int $id_permiso) 
+    public function registrarpermisos(int $id_user, int $id_permiso)
     {
         $sql = "INSERT INTO detalle_permisos (id_usuario,id_permiso) VALUES (?,?)";
         $datos = array($id_user, $id_permiso);
-        $data = $this->save($sql,$datos);
+        $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res =  'ok';
         } else {
             $res =  'error';
         }
-        return $res;    
+        return $res;
     }
-
-    public function eliminarpermisos(int $id_user) 
+    public function eliminarpermisos(int $id_user)
     {
         $sql = "DELETE FROM  detalle_permisos WHERE id_usuario = ?";
         $datos = array($id_user);
-        $data = $this->save($sql,$datos);
+        $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res =  'ok';
         } else {
             $res =  'error';
         }
-        
-        return $res;  
+
+        return $res;
     }
     public function getdetallepermisos(int $id_user)
     {
@@ -137,12 +131,10 @@ class UsuariosModel extends Query{
         $data = $this->selectAll($sql);
         return $data;
     }
-    public function verficarpermiso(int $id_user,string $nombre) 
+    public function verficarpermiso(int $id_user, string $nombre)
     {
-       $sql = "SELECT P.id, p.permiso, d.id, d.id_usuario, d.id_permiso FROM permisos p INNER JOIN detalle_permisos d ON p.id = d.id_permiso WHERE d.id_usuario = $id_user AND p.permiso = '$nombre'";
-       $data = $this->selectAll($sql);
-       return $data;
+        $sql = "SELECT P.id, p.permiso, d.id, d.id_usuario, d.id_permiso FROM permisos p INNER JOIN detalle_permisos d ON p.id = d.id_permiso WHERE d.id_usuario = $id_user AND p.permiso = '$nombre'";
+        $data = $this->selectAll($sql);
+        return $data;
     }
 }
-?>
-

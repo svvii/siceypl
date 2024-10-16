@@ -1,7 +1,7 @@
 <?php
 class LibrosModel extends Query
 {
-    private $color_estante, $id_generacion, $matricula, $apellido_p, $apellido_m, $nombre, $id_carrera, $codigo_estadia, $nombre_proyecto, $fecha_documento, $nombre_empresa, $tutor_academico, $asesor_academico, $asesor_empresarial, $observaciones, $id, $estado,$img;
+    private $color_estante, $id_generacion, $matricula, $apellido_p, $apellido_m, $nombre, $id_carrera, $codigo_estadia, $nombre_proyecto, $fecha_documento, $nombre_empresa, $tutor_academico, $asesor_academico, $asesor_empresarial, $observaciones, $id, $estado, $img;
 
     public function __construct()
     {
@@ -68,7 +68,7 @@ class LibrosModel extends Query
         $this->img = $img;
 
         $sql = "INSERT INTO documentos(color_estante, id_generacion, matricula, apellido_p, apellido_m, nombre, id_carrera, codigo_estadia, nombre_proyecto, fecha_documento, nombre_empresa, tutor_academico, asesor_academico, asesor_empresarial, observaciones, folio,pdf) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-        $datos = array($this->color_estante, $this->id_generacion, $this->matricula, $this->apellido_p, $this->apellido_m, $this->nombre, $this->id_carrera, $this->codigo_estadia, $this->nombre_proyecto, $this->fecha_documento, $this->nombre_empresa, $this->tutor_academico, $this->asesor_academico, $this->asesor_empresarial, $this->observaciones, $folio,$this->img);
+        $datos = array($this->color_estante, $this->id_generacion, $this->matricula, $this->apellido_p, $this->apellido_m, $this->nombre, $this->id_carrera, $this->codigo_estadia, $this->nombre_proyecto, $this->fecha_documento, $this->nombre_empresa, $this->tutor_academico, $this->asesor_academico, $this->asesor_empresarial, $this->observaciones, $folio, $this->img);
         $data = $this->save($sql, $datos);
 
         if ($data == 1) {
@@ -96,6 +96,7 @@ class LibrosModel extends Query
         string $asesor_academico,
         string $asesor_empresarial,
         string $observaciones,
+        string $img,
         int $id,
     ) {
         $this->color_estante = $color_estante;
@@ -113,9 +114,10 @@ class LibrosModel extends Query
         $this->asesor_academico = $asesor_academico;
         $this->asesor_empresarial = $asesor_empresarial;
         $this->observaciones = $observaciones;
+        $this->img = $img;
         $this->id = $id;
-        $sql = "UPDATE documentos SET color_estante = ?, id_generacion = ?, matricula = ?,  apellido_p = ?, apellido_m = ?, nombre = ?, id_carrera = ?, codigo_estadia = ?, nombre_proyecto = ?, fecha_documento = ?, nombre_empresa = ?, tutor_academico = ?, asesor_academico = ?, asesor_empresarial = ?, observaciones = ?  WHERE id = ?";
-        $datos = array($this->color_estante, $this->id_generacion, $this->matricula, $this->apellido_p, $this->apellido_m, $this->nombre, $this->id_carrera, $this->codigo_estadia, $this->nombre_proyecto, $this->fecha_documento, $this->nombre_empresa, $this->tutor_academico, $this->asesor_academico, $this->asesor_empresarial, $this->observaciones, $this->id);
+        $sql = "UPDATE documentos SET color_estante = ?, id_generacion = ?, matricula = ?,  apellido_p = ?, apellido_m = ?, nombre = ?, id_carrera = ?, codigo_estadia = ?, nombre_proyecto = ?, fecha_documento = ?, nombre_empresa = ?, tutor_academico = ?, asesor_academico = ?, asesor_empresarial = ?, observaciones = ? , pdf = ? WHERE id = ?";
+        $datos = array($this->color_estante, $this->id_generacion, $this->matricula, $this->apellido_p, $this->apellido_m, $this->nombre, $this->id_carrera, $this->codigo_estadia, $this->nombre_proyecto, $this->fecha_documento, $this->nombre_empresa, $this->tutor_academico, $this->asesor_academico, $this->asesor_empresarial, $this->observaciones, $this->img, $this->id);
         $data = $this->save($sql, $datos);
 
         if ($data == 1) {
@@ -155,5 +157,18 @@ class LibrosModel extends Query
         $data = $this->select($sql);
         return isset($data['ultimoCodigo']) ? $data['ultimoCodigo'] : 0;
     }
+    public function obtenerRutaPdfPorId($id)
+    {
+        $sql = "SELECT pdf FROM documentos WHERE id = $id";
+        $resultado = $this->select($sql);
+        if ($resultado && isset($resultado['pdf'])) {
+            return 'Assets/Documentos/' . $resultado['pdf'];
+        } else {
+            return null;
+        }
+    }
+    
+    
+
+ 
 }
-?>

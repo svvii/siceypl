@@ -1,7 +1,7 @@
 <?php include "Views/Templates/header.php"; ?>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active">
-    <p style="text-align: center; font-weight: bold; font-size: 20px; color: #343a40;">¡Bienvenido, <?php echo $_SESSION['nombre']; ?>!</p>
+    <p style="text-align: center; font-weight: bold; font-size: 20px; color: #343a40;"></p>
 
     </li>
 </ol>
@@ -103,22 +103,83 @@
             </div>
         </div>
     </div>
-</div>
-<div class="row mt-4">
+ </div>
+ <div class="row mt-4">
+    <div class="col-xl-3 col-md-6">
+        <div class="card" style="background-color:  #6E7F7A; color: white;">
+            <div class="card-body d-flex">
+                Listado de Estadias Balleza
+                <i class="fas fa-water fa-2x  ml-auto"></i>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a href="<?php echo base_url; ?>EstadiasB" class="text-white">Ver Detalle</a>
+                <span class="text-white"><?php echo $data['estadiasb']['total'] ?></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card" style="background-color:  #C0A614; color: white;">
+            <div class="card-body d-flex">
+                Estudiantes
+                <i class="fas fa-graduation-cap fa-2x ml-auto "></i>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a href="<?php echo base_url; ?>Estudiantes" class="text-white">Ver Detalle</a>
+                <span class="text-white"><?php echo $data['estudiantes']['total'] ?></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card" style="background-color: #986BB0; color: white;">
+            <div class="card-body d-flex">
+                Autores
+                <i class="fas fa-user mr-2 ml-auto"></i>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a href="<?php echo base_url; ?>Autores" class="text-white">Ver Detalle</a>
+                <span class="text-white"><?php echo $data['autores']['total'] ?></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card" style="background-color:  #45DB09; color: white;">
+            <div class="card-body d-flex">
+                Editoriales
+                <i class="icon fa fa-tags ml-auto"></i>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a href="<?php echo base_url; ?>Editoriales" class="text-white">Ver Detalle</a>
+                <span class="text-white"><?php echo $data['editoriales']['total'] ?></span>
+            </div>
+        </div>
+    </div>
+ </div>
+
+ <div class="row mt-4">
     <div class="col-xl-12">
         <div class="card border-0 shadow">
             <div class="card-header bg-primary text-white py-3">
                 <h4 class="m-0"><i class="fas fa-search mr-2"></i> Encuentra Estadías</h4>
             </div>
             <div class="card-body d-flex justify-content-center">
-                <button id="miBoton" class="btn btn-success btn-lg rounded-pill px-5 py-3">
-                    <i class="fa-solid fa-arrow-right mr-2"></i> Explora Ahora
+                <button id="miBoton" class="btn btn-success btn-lg rounded-pill px-5 py-3 mr-3">
+                    <i class="fas fa-university mr-1"></i> Universidad Tecnológica de Parral
+                </button>
+                <button id="nuevoBoton" class="btn btn-danger btn-lg rounded-pill px-5 py-3 mr-3" onclick="window.location.href='http://localhost/Buscadro_Libros/'">
+                    <i class="fas fa-school mr-1"></i> Buscador Libros
+                </button>
+                <button id="balleza" class="btn btn-success btn-lg rounded-pill px-5 py-3">
+                    <i class="fas fa-map-marker-alt mr-1"></i> Universidad Unidad Rio Balleza
                 </button>
             </div>
         </div>
     </div>
 </div>
-<div class="row mt-4">
+
+
+
+
+<!-- <div class="row mt-4">
     <div class="col-6">
         <div class="card shadow">
             <div class="card-body">
@@ -135,12 +196,16 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <script>
     var boton = document.getElementById('miBoton');
     boton.addEventListener('click', function() {
-        window.location.href = 'http://localhost/estadias/GENERA_QR/';
+        window.location.href = 'http://localhost/estadias/GENERA_QR/index.php';
+    });
+    var boton = document.getElementById('balleza');
+    boton.addEventListener('click', function() {
+        window.location.href = 'http://localhost/estadias/GENERA_QR/balleza.php';
     });
 </script>
 <?php include "Views/Templates/footer.php"; ?>

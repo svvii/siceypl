@@ -29,14 +29,14 @@
             <div class="modal-body">
                 <form method="post" id="frmCarreraa">
                     <div class="form-group">
-                        <label for="nombre">nombre</label>
+                        <label for="nombre">Nombre</label>
                         <input type="hidden" id="id" name="id"> 
-                        <input id="nombre" class="form-control" type="text" name="nombre" placeholder="nombre">
+                        <input id="nombre" class="form-control" type="text" name="nombre" placeholder="Nombre">
                     </div>
                 
                     <div class="form-group">
-                        <label for="abreviatura">abreviatura</label>
-                        <input id="abreviatura" class="form-control" type="text" name="abreviatura" placeholder="Nombre del Usuario">
+                        <label for="abreviatura">Abreviatura</label>
+                        <input id="abreviatura" class="form-control" type="text" name="abreviatura" placeholder="Abreviatura">
                     </div>
                 <button class="btn btn-success" type="button" onclick="registrarCarr(event);" id="btnAccion">Registrar</button>
                 <button class="btn btn-secondary" type="button" data-dismiss="modal" >Cancelar</button>

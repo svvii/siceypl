@@ -12,7 +12,7 @@ class Libros_biblioteca extends Controller
     public function index()
     {
         $id_user = $_SESSION['id_usuario'];
-        $verificar = $this->model->verficarpermiso($id_user, 'generaciones');
+        $verificar = $this->model->verficarpermiso($id_user, 'Librosbiblioteca');
         if (!empty($verificar) || $id_user == 1) {
             $this->views->getViews($this, "index");
         } else {
@@ -115,20 +115,25 @@ class Libros_biblioteca extends Controller
         die();
     }
     public function generarQR($id)
-    {
-        include 'libraries/Lib/barcode.php';
+{
+    include 'libraries/Lib/barcode.php';
 
-        $librosqr = $this->model->obtenerDatosqr($id);
-        if ($librosqr) {
-            
-            $datos_legibles = $librosqr['titulo']."%".$librosqr['autor']."%".$librosqr['editorial']."%".$librosqr['cantidad'];
-            
-            $generator = new barcode_generator();
-            $svg = $generator->render_svg("qr", $datos_legibles, "");
-            header("Content-Type: image/svg+xml");
-            echo $svg;
-        } else {
-            echo "No se encontró ningún préstamo con el ID proporcionado.";
-        }
+    $librosqr = $this->model->obtenerDatosqr($id);
+    if ($librosqr) {
+        $datos_legibles = $id."%".$librosqr['titulo']."%".$librosqr['autor']."%".$librosqr['editorial'];
+        $generator = new barcode_generator();
+        $svg = $generator->render_svg("qr", $datos_legibles, "");
+
+        $response = [
+            'svg' => $svg,
+            'clasificacion' => $librosqr['clasificacion']
+        ];
+        
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    } else {
+        echo json_encode(['error' => 'No se encontró ningún préstamo con el ID proporcionado.']);
     }
+}
+    
 }
